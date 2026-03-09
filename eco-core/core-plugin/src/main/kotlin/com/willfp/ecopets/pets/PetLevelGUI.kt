@@ -1,6 +1,5 @@
 package com.willfp.ecopets.pets
 
-import com.willfp.eco.core.EcoPlugin
 import com.willfp.eco.core.gui.menu
 import com.willfp.eco.core.gui.menu.Menu
 import com.willfp.eco.core.gui.menu.MenuLayer
@@ -15,12 +14,11 @@ import com.willfp.eco.core.items.builder.ItemStackBuilder
 import com.willfp.eco.util.NumberUtils
 import com.willfp.ecomponent.components.LevelComponent
 import com.willfp.ecomponent.components.LevelState
+import com.willfp.ecopets.plugin
 import org.bukkit.entity.Player
 import org.bukkit.inventory.ItemStack
 
-
 class PetLevelGUI(
-    plugin: EcoPlugin,
     private val pet: Pet
 ) {
     private val menu: Menu
@@ -31,7 +29,10 @@ class PetLevelGUI(
 
         val progressionPattern = plugin.configYml.getStrings("level-gui.progression-slots.pattern")
 
-        val component = object : LevelComponent(progressionPattern, pet.maxLevel) {
+        val component = object : LevelComponent() {
+            override val pattern: List<String> = progressionPattern
+            override val maxLevel: Int = pet.maxLevel
+
             override fun getLevelItem(player: Player, menu: Menu, level: Int, levelState: LevelState): ItemStack {
                 val key = levelState.name.lowercase().replace("_", "-")
 
